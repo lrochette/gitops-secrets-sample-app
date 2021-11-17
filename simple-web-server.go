@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"gopkg.in/ini.v1"
 )
@@ -17,6 +18,7 @@ type configurationListHandler struct {
 	dbCon          string
 	dbUser         string
 	dbPassword     string
+	url	       string
 }
 
 func (h *configurationListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -30,6 +32,7 @@ func (h *configurationListHandler) ServeHTTP(w http.ResponseWriter, r *http.Requ
 	fmt.Fprintf(w, "<li>db_con: "+h.dbCon+"</li>")
 	fmt.Fprintf(w, "<li>db_user: "+h.dbUser+"</li>")
 	fmt.Fprintf(w, "<li>db_password: "+h.dbPassword+"</li>")
+	fmt.Fprintf(w, "<li>url: "+h.url+"</li>")
 	fmt.Fprintf(w, "</ul>")
 
 	fmt.Fprintf(w, "<h2> Private Signing key </h2>")
@@ -75,7 +78,7 @@ func main() {
 	clh.dbCon = cfg.Section("mysql").Key("db_con").String()
 	clh.dbUser = cfg.Section("mysql").Key("db_user").String()
 	clh.dbPassword = cfg.Section("mysql").Key("db_password").String()
-
+	clh.url = os.Getenv("CF_BUILD_ID").String()
 	fmt.Println("Simple web server is starting now on port 8080...")
 
 	http.Handle("/", &clh)
