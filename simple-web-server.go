@@ -78,7 +78,7 @@ func main() {
 	clh.dbCon = cfg.Section("mysql").Key("db_con").String()
 	clh.dbUser = cfg.Section("mysql").Key("db_user").String()
 	clh.dbPassword = cfg.Section("mysql").Key("db_password").String()
-	clh.url = os.Getenv("CF_BUILD_ID").String()
+	clh.url = os.Getenv("CF_BUILD_ID")
 	fmt.Println("Simple web server is starting now on port 8080...")
 
 	http.Handle("/", &clh)
